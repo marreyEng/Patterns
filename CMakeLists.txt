@@ -28,6 +28,19 @@ PUBLIC
         include/CommandPattern.h
 )
 
+add_library(StrategyPattern SHARED)
+
+target_sources(StrategyPattern
+PRIVATE
+    src/StrategyPattern.cpp
+PUBLIC
+    FILE_SET headers
+    TYPE HEADERS
+    BASE_DIRS include
+    FILES
+        include/StrategyPattern.h
+)
+
 add_executable(exec)
 target_sources(exec
 PRIVATE
@@ -36,4 +49,5 @@ PRIVATE
 target_link_libraries(exec
 PRIVATE
     CommandPattern
+    StrategyPattern
 )

@@ -1,26 +1,24 @@
 #include <iostream>
 #include <CommandPattern.h>
 
-int SayHello::Execute() const {
-    std::cout << "Hello" << std::endl;
-    return 0;
+int SayHello::Execute(const int& arg) const {
+    return arg * 2;
 }
-int SayBye::Execute() const {
-    std::cout << "Bye" << std::endl;
-    return 0;
+int SayBye::Execute(const int& arg) const {
+    return arg + arg;
 }
 
-int useCommand(const Command& command){
-    command.Execute();
-    return 0;
+int useCommand(const Command& command, const int& arg){
+    return command.Execute(arg);
 }
 
 int CommandPattern(){
     SayHello a;
     SayBye b;
 
-    useCommand(a);
-    useCommand(b);
+    if(useCommand(a,1) == useCommand(b,1)){
+        return 0;
+    }
 
-    return 0;
+    return -42;
 }
