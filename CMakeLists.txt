@@ -16,7 +16,6 @@ if(PROJECT_IS_TOP_LEVEL)
 endif()
 
 add_library(CommandPattern SHARED)
-
 target_sources(CommandPattern
 PRIVATE
     src/CommandPattern.cpp
@@ -29,7 +28,6 @@ PUBLIC
 )
 
 add_library(StrategyPattern SHARED)
-
 target_sources(StrategyPattern
 PRIVATE
     src/StrategyPattern.cpp
@@ -41,6 +39,19 @@ PUBLIC
         include/StrategyPattern.h
 )
 
+
+add_library(AdaptorPattern SHARED)
+target_sources(AdaptorPattern
+PRIVATE
+    src/AdaptorPattern.cpp
+PUBLIC
+    FILE_SET headers
+    TYPE HEADERS
+    BASE_DIRS include
+    FILES
+        include/AdaptorPattern.h
+)
+
 add_executable(exec)
 target_sources(exec
 PRIVATE
@@ -48,6 +59,7 @@ PRIVATE
 )
 target_link_libraries(exec
 PRIVATE
+    AdaptorPattern
     CommandPattern
     StrategyPattern
 )
