@@ -3,45 +3,45 @@
 #include <memory>
 #include <iostream>
 
-struct AbstractProduct{
+struct Product{
     virtual void BeUsed() const = 0;
 };
 
-struct ProductA : public AbstractProduct{
+struct Chair : public Product{
 };
-struct ProductB: public AbstractProduct{
+struct Table: public Product{
 };
 
-struct ProductA1 : public ProductA{
+struct ModernChair : public Chair{
     void BeUsed() const override;
 };
-struct ProductA2 : public ProductA{
+struct ModernTable : public Table{
     void BeUsed() const override;
 };
-struct ProductB1 : public ProductB{
+struct VintageChair : public Chair{
     void BeUsed() const override;
 };
-struct ProductB2 : public ProductB{
+struct VintageTable : public Table{
     void BeUsed() const override;
 };
 
 struct AbstractFactory{
-    virtual std::shared_ptr<AbstractProduct> CreateProduct1() const = 0;
-    virtual std::shared_ptr<AbstractProduct> CreateProduct2() const = 0;
+    virtual std::shared_ptr<Chair> CreateChair() const = 0;
+    virtual std::shared_ptr<Table> CreateTable() const = 0;
 };
-struct FactoryA : public AbstractFactory{
-    std::shared_ptr<AbstractProduct> CreateProduct1() const override;
-    std::shared_ptr<AbstractProduct> CreateProduct2() const override;
+struct ModernFactory : public AbstractFactory{
+    std::shared_ptr<Chair> CreateChair() const override;
+    std::shared_ptr<Table> CreateTable() const override;
 };
-struct FactoryB : public AbstractFactory{
-    std::shared_ptr<AbstractProduct> CreateProduct1() const override;
-    std::shared_ptr<AbstractProduct> CreateProduct2() const override;
+struct VintageFactory : public AbstractFactory{
+    std::shared_ptr<Chair> CreateChair() const override;
+    std::shared_ptr<Table> CreateTable() const override;
 };
 
 struct Client{
     std::shared_ptr<AbstractFactory> factory{};
-    std::shared_ptr<AbstractProduct> product1{};
-    std::shared_ptr<AbstractProduct> product2{};
+    std::shared_ptr<Chair> chair{};
+    std::shared_ptr<Table> table{};
 
     Client() = default;
 
