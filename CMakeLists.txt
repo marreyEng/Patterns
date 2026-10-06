@@ -89,6 +89,18 @@ PUBLIC
         include/AbstractFactoryPattern.h
 )
 
+add_library(PrototypePattern SHARED)
+target_sources(PrototypePattern
+PRIVATE
+    src/PrototypePattern.cpp
+PUBLIC
+    FILE_SET headers
+    TYPE HEADERS
+    BASE_DIRS include
+    FILES
+        include/PrototypePattern.h
+)
+
 add_executable(exec)
 target_sources(exec
 PRIVATE
@@ -100,6 +112,7 @@ target_link_libraries(FactoryMethodPattern PRIVATE TestTitle)
 target_link_libraries(AdaptorPattern PRIVATE TestTitle)
 target_link_libraries(CommandPattern PRIVATE TestTitle)
 target_link_libraries(StrategyPattern PRIVATE TestTitle)
+target_link_libraries(PrototypePattern PRIVATE TestTitle)
 
 target_link_libraries(exec
 PRIVATE
@@ -108,4 +121,5 @@ PRIVATE
     AdaptorPattern
     CommandPattern
     StrategyPattern
+    PrototypePattern
 )

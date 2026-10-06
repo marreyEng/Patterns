@@ -3,6 +3,7 @@
 #include <AdaptorPattern.h>
 #include <FactoryMethodPattern.h>
 #include <AbstractFactoryPattern.h>
+#include <PrototypePattern.h>
 
 int main(){
     AdaptorPattern();
@@ -11,6 +12,8 @@ int main(){
     FactoryMethodPattern();
     FactoryMethodPattern();
     AbstractFactoryPattern();
+    AbstractFactoryPattern();
+    PrototypePattern();
 
     return 0;
 }
