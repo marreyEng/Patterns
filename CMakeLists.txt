@@ -52,16 +52,16 @@ PUBLIC
         include/AdaptorPattern.h
 )
 
-add_library(FactoryMethod SHARED)
-target_sources(FactoryMethod
+add_library(FactoryMethodPattern SHARED)
+target_sources(FactoryMethodPattern
 PRIVATE
-    src/FactoryMethod.cpp
+    src/FactoryMethodPattern.cpp
 PUBLIC
     FILE_SET headers
     TYPE HEADERS
     BASE_DIRS include
     FILES
-        include/FactoryMethod.h
+        include/FactoryMethodPattern.h
 )
 
 add_executable(exec)
@@ -71,7 +71,7 @@ PRIVATE
 )
 target_link_libraries(exec
 PRIVATE
-    FactoryMethod
+    FactoryMethodPattern
     AdaptorPattern
     CommandPattern
     StrategyPattern

@@ -44,7 +44,7 @@ struct Tetrahedron : public Shape{
     void Print() const override;
 };
 
-int FactoryMethod();
+int FactoryMethodPattern();
 
 
 #endif

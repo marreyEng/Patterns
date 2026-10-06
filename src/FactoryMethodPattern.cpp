@@ -1,4 +1,4 @@
-#include <FactoryMethod.h>
+#include <FactoryMethodPattern.h>
 #include <iostream>
 
 void Point2D::Print() const {
@@ -52,7 +52,7 @@ void Tetrahedron::Print() const{
 }
 
 
-int FactoryMethod(){
+int FactoryMethodPattern(){
     Triangle t1;
     Tetrahedron t2;
 
