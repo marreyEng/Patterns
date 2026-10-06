@@ -34,7 +34,7 @@ int AbstractFactoryPattern(){
     Title title(__func__);
     
     auto a = std::make_shared<FactoryA>();
-    auto b = std::make_shared<FactoryA>();
+    auto b = std::make_shared<FactoryB>();
 
     Client client;
     client.SetFactory(a);
