@@ -1,4 +1,5 @@
 #include <iostream>
+#include <TestTitle.h>
 #include <CommandPattern.h>
 
 int SayHello::Execute(const int& arg) const {
@@ -13,6 +14,7 @@ int useCommand(const Command& command, const int& arg){
 }
 
 int CommandPattern(){
+    Title title(__func__);
     SayHello a;
     SayBye b;
 

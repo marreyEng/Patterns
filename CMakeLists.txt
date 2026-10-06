@@ -15,6 +15,20 @@ if(PROJECT_IS_TOP_LEVEL)
     )
 endif()
 
+add_library(TestTitle SHARED)
+target_sources(TestTitle
+PRIVATE
+    src/TestTitle.cpp
+PUBLIC
+    FILE_SET headers
+    TYPE HEADERS
+    BASE_DIRS include
+    FILES
+        include/TestTitle.h
+)
+add_library(CommonInterface INTERFACE)
+target_link_libraries(CommonInterface INTERFACE TestTitle)
+
 add_library(CommandPattern SHARED)
 target_sources(CommandPattern
 PRIVATE
@@ -38,7 +52,6 @@ PUBLIC
     FILES
         include/StrategyPattern.h
 )
-
 
 add_library(AdaptorPattern SHARED)
 target_sources(AdaptorPattern
@@ -64,13 +77,33 @@ PUBLIC
         include/FactoryMethodPattern.h
 )
 
+add_library(AbstractFactoryPattern SHARED)
+target_sources(AbstractFactoryPattern
+PRIVATE
+    src/AbstractFactoryPattern.cpp
+PUBLIC
+    FILE_SET headers
+    TYPE HEADERS
+    BASE_DIRS include
+    FILES
+        include/AbstractFactoryPattern.h
+)
+
 add_executable(exec)
 target_sources(exec
 PRIVATE
     src/main.cpp
 )
+
+target_link_libraries(AbstractFactoryPattern PRIVATE TestTitle)
+target_link_libraries(FactoryMethodPattern PRIVATE TestTitle)
+target_link_libraries(AdaptorPattern PRIVATE TestTitle)
+target_link_libraries(CommandPattern PRIVATE TestTitle)
+target_link_libraries(StrategyPattern PRIVATE TestTitle)
+
 target_link_libraries(exec
 PRIVATE
+    AbstractFactoryPattern
     FactoryMethodPattern
     AdaptorPattern
     CommandPattern

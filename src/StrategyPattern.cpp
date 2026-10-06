@@ -1,4 +1,5 @@
 #include <StrategyPattern.h>
+#include <TestTitle.h>
 
 int Iterative::power(int base, int exp){
     for(int i = 0; i < exp;++i){
@@ -28,6 +29,7 @@ int Power(int base, int exp, Type type){
 }
 
 int StrategyPattern(){
+    Title title(__func__);
     if(Power(2, 8, Type::Iterative) == Power(2, 8, Type::Recursive)){
         return 0;
     }

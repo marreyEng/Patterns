@@ -1,4 +1,5 @@
 #include <AdaptorPattern.h>
+#include <TestTitle.h>
 #include <iostream>
 
 void Adaptor::print() const {
@@ -13,6 +14,7 @@ void use(const IFace& impl){
 }
 
 int AdaptorPattern(){
+    Title title(__func__);
     Adaptee adaptee;
 
     Adaptor adaptor(&adaptee);
