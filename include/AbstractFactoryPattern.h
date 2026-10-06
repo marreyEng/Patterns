@@ -6,26 +6,42 @@
 struct AbstractProduct{
     virtual void BeUsed() const = 0;
 };
+
 struct ProductA : public AbstractProduct{
+};
+struct ProductB: public AbstractProduct{
+};
+
+struct ProductA1 : public ProductA{
     void BeUsed() const override;
 };
-struct ProductB : public AbstractProduct{
+struct ProductA2 : public ProductA{
+    void BeUsed() const override;
+};
+struct ProductB1 : public ProductB{
+    void BeUsed() const override;
+};
+struct ProductB2 : public ProductB{
     void BeUsed() const override;
 };
 
 struct AbstractFactory{
-    virtual std::shared_ptr<AbstractProduct> Create() const = 0;
+    virtual std::shared_ptr<AbstractProduct> CreateProduct1() const = 0;
+    virtual std::shared_ptr<AbstractProduct> CreateProduct2() const = 0;
 };
 struct FactoryA : public AbstractFactory{
-    std::shared_ptr<AbstractProduct> Create() const override;
+    std::shared_ptr<AbstractProduct> CreateProduct1() const override;
+    std::shared_ptr<AbstractProduct> CreateProduct2() const override;
 };
 struct FactoryB : public AbstractFactory{
-    std::shared_ptr<AbstractProduct> Create() const override;
+    std::shared_ptr<AbstractProduct> CreateProduct1() const override;
+    std::shared_ptr<AbstractProduct> CreateProduct2() const override;
 };
 
 struct Client{
     std::shared_ptr<AbstractFactory> factory{};
-    std::shared_ptr<AbstractProduct> product{};
+    std::shared_ptr<AbstractProduct> product1{};
+    std::shared_ptr<AbstractProduct> product2{};
 
     Client() = default;
 

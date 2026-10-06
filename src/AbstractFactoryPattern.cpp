@@ -2,28 +2,41 @@
 #include <AbstractFactoryPattern.h>
 #include <memory>
 
-void ProductA::BeUsed() const {
-    std::cout << "Product A is used" << std::endl;
+void ProductA1::BeUsed() const {
+    std::cout << "Product A1 is used" << std::endl;
 }
-
-void ProductB::BeUsed() const {
-    std::cout << "Product B is used" << std::endl;
+void ProductB1::BeUsed() const {
+    std::cout << "Product B1 is used" << std::endl;
 }
-std::shared_ptr<AbstractProduct> FactoryA::Create() const {
-    return std::make_shared<ProductA>();
+void ProductA2::BeUsed() const {
+    std::cout << "Product A2 is used" << std::endl;
 }
-std::shared_ptr<AbstractProduct> FactoryB::Create() const {
-    return std::make_shared<ProductB>();
+void ProductB2::BeUsed() const {
+    std::cout << "Product B2 is used" << std::endl;
+}
+std::shared_ptr<AbstractProduct> FactoryA::CreateProduct1() const {
+    return std::make_shared<ProductA1>();
+}
+std::shared_ptr<AbstractProduct> FactoryA::CreateProduct2() const {
+    return std::make_shared<ProductA2>();
+}
+std::shared_ptr<AbstractProduct> FactoryB::CreateProduct1() const {
+    return std::make_shared<ProductB1>();
+}
+std::shared_ptr<AbstractProduct> FactoryB::CreateProduct2() const {
+    return std::make_shared<ProductB2>();
 }
 
 void Client::SetFactory(std::shared_ptr<AbstractFactory> _factory){
     factory = std::move(_factory);
 }
 void Client::CreateProduct(){
-    product = factory->Create();
+    product1 = factory->CreateProduct1();
+    product2 = factory->CreateProduct2();
 }
 void Client::UseProduct() const{
-    product->BeUsed();
+    product1->BeUsed();
+    product2->BeUsed();
 }
 void Client::Run(){
     CreateProduct();
