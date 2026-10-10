@@ -29,6 +29,18 @@ PUBLIC
 add_library(CommonInterface INTERFACE)
 target_link_libraries(CommonInterface INTERFACE TestTitle)
 
+add_library(TypeErasurePattern SHARED)
+target_sources(TypeErasurePattern
+PRIVATE
+    src/TypeErasurePattern.cpp
+PUBLIC
+    FILE_SET headers
+    TYPE HEADERS
+    BASE_DIRS include
+    FILES
+        include/TypeErasurePattern.h
+)
+
 add_library(CommandPattern SHARED)
 target_sources(CommandPattern
 PRIVATE
@@ -113,6 +125,7 @@ target_link_libraries(AdaptorPattern PRIVATE TestTitle)
 target_link_libraries(CommandPattern PRIVATE TestTitle)
 target_link_libraries(StrategyPattern PRIVATE TestTitle)
 target_link_libraries(PrototypePattern PRIVATE TestTitle)
+target_link_libraries(TypeErasurePattern PRIVATE TestTitle)
 
 target_link_libraries(exec
 PRIVATE
@@ -122,4 +135,5 @@ PRIVATE
     CommandPattern
     StrategyPattern
     PrototypePattern
+    TypeErasurePattern
 )
