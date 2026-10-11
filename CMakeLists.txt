@@ -113,6 +113,18 @@ PUBLIC
         include/PrototypePattern.h
 )
 
+add_library(CompositorPattern SHARED)
+target_sources(CompositorPattern
+PRIVATE
+    src/CompositorPattern.cpp
+PUBLIC
+    FILE_SET headers
+    TYPE HEADERS
+    BASE_DIRS include
+    FILES
+        include/CompositorPattern.h
+)
+
 add_executable(exec)
 target_sources(exec
 PRIVATE
@@ -126,6 +138,7 @@ target_link_libraries(CommandPattern PRIVATE TestTitle)
 target_link_libraries(StrategyPattern PRIVATE TestTitle)
 target_link_libraries(PrototypePattern PRIVATE TestTitle)
 target_link_libraries(TypeErasurePattern PRIVATE TestTitle)
+target_link_libraries(CompositorPattern PRIVATE TestTitle)
 
 target_link_libraries(exec
 PRIVATE
@@ -136,4 +149,5 @@ PRIVATE
     StrategyPattern
     PrototypePattern
     TypeErasurePattern
+    CompositorPattern
 )
