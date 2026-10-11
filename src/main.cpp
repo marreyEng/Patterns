@@ -5,7 +5,8 @@
 #include <AbstractFactoryPattern.h>
 #include <PrototypePattern.h>
 #include <TypeErasurePattern.h>
-#include  <CompositorPattern.h>
+#include <CompositorPattern.h>
+#include <ExpressionPattern.h>
 
 int main(){
     AdaptorPattern();
@@ -18,6 +19,7 @@ int main(){
     PrototypePattern();
     TypeErasurePattern();
     CompositorPattern();
+    ExpressionPattern();
 
     return 0;
 }

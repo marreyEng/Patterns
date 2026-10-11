@@ -125,6 +125,18 @@ PUBLIC
         include/CompositorPattern.h
 )
 
+add_library(ExpressionPattern SHARED)
+target_sources(ExpressionPattern
+PRIVATE
+    src/ExpressionPattern.cpp
+PUBLIC
+    FILE_SET headers
+    TYPE HEADERS
+    BASE_DIRS include
+    FILES
+        include/ExpressionPattern.h
+)
+
 add_executable(exec)
 target_sources(exec
 PRIVATE
@@ -139,6 +151,7 @@ target_link_libraries(StrategyPattern PRIVATE TestTitle)
 target_link_libraries(PrototypePattern PRIVATE TestTitle)
 target_link_libraries(TypeErasurePattern PRIVATE TestTitle)
 target_link_libraries(CompositorPattern PRIVATE TestTitle)
+target_link_libraries(ExpressionPattern PRIVATE TestTitle)
 
 target_link_libraries(exec
 PRIVATE
@@ -150,4 +163,5 @@ PRIVATE
     PrototypePattern
     TypeErasurePattern
     CompositorPattern
+    ExpressionPattern
 )
