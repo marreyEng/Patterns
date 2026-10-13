@@ -8,31 +8,35 @@
 
 template<typename T>
 struct Expression{
+    using Type = std::remove_reference_t<T>;
+
     virtual ~Expression() = default;
-    virtual T eval(const T& x) const = 0;
-    virtual std::unique_ptr<Expression<T>> clone() const = 0;
+    virtual Type eval(const Type& x) const = 0;
+    virtual std::unique_ptr<Expression<Type>> clone() const = 0;
 };
 
 template<typename T>
 struct Constant : public Expression<T>{
-    T value;
-    Constant(T val) : value{val}
+    using Type = Expression<T>::Type;
+    Type value;
+    Constant(Type val) : value{val}
     {}
 
-    virtual T eval(const T& x) const override {
+    virtual T eval(const Type& x) const override {
         return value;
     }
-    virtual std::unique_ptr<Expression<T>> clone() const override {
+    virtual std::unique_ptr<Expression<Type>> clone() const override {
         return std::make_unique<Constant>(*this);
     }
 };
 
 template<typename T>
 struct Variable : public Expression<T>{
-    virtual T eval(const T& x) const override {
+    using Type = Expression<T>::Type;
+    virtual Type eval(const Type& x) const override {
         return x;
     }
-    virtual std::unique_ptr<Expression<T>> clone() const override {
+    virtual std::unique_ptr<Expression<Type>> clone() const override {
         return std::make_unique<Variable>(*this);
     }
 };
@@ -52,10 +56,11 @@ struct Div{
 
 template<typename T, typename Op>
 struct Binary : public Expression<T>{
-    std::unique_ptr<Expression<T>> lhs;
-    std::unique_ptr<Expression<T>> rhs;
+    using Type = Expression<T>::Type;
+    std::unique_ptr<Expression<Type>> lhs;
+    std::unique_ptr<Expression<Type>> rhs;
 
-    Binary(std::unique_ptr<Expression<T>> l, std::unique_ptr<Expression<T>> r)
+    Binary(std::unique_ptr<Expression<Type>> l, std::unique_ptr<Expression<Type>> r)
     : lhs{std::move(l)}
     , rhs{std::move(r)}
     {}
@@ -72,19 +77,20 @@ struct Binary : public Expression<T>{
         return Op::eval(lhs->eval(x), rhs->eval(x));
     }
 
-    virtual std::unique_ptr<Expression<T>> clone() const override {
+    virtual std::unique_ptr<Expression<Type>> clone() const override {
         return std::make_unique<Binary>(*this);
     }
 };
 
 template<typename T>
 struct Expr{
-    std::unique_ptr<Expression<T>> pimpl;
+    using Type= std::remove_reference_t<T>;
+    std::unique_ptr<Expression<Type>> pimpl;
 
     Expr(T val)
-    : pimpl{std::make_unique<Constant<T>>(val)}
+    : pimpl{std::make_unique<Constant<Type>>(val)}
     {}
-    Expr(std::unique_ptr<Expression<T>> p)
+    Expr(std::unique_ptr<Expression<Type>> p)
     : pimpl{std::move(p)}
     {}
 
@@ -101,9 +107,9 @@ struct Expr{
     Expr& operator=(Expr&&) noexcept = default;
     
     static Expr CreateVariable() {
-        return Expr(std::make_unique<Variable<T>>());
+        return Expr(std::make_unique<Variable<Type>>());
     }
-    T eval(const T& x) const {
+    Type eval(const Type& x) const {
         return pimpl->eval(x);
     }
 };

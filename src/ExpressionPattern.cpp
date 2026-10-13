@@ -13,13 +13,15 @@ auto createExpression(){
     auto c = Expr<float>(C);
     auto x = Expr<float>::CreateVariable();
 
-    return a * x + b;
+    return a * x *x + b * x + c;
 }
 
 int ExpressionPattern(){
     Title t{__func__};
 
     auto f = createExpression();
-    std::cout << f.eval(1);
+    for(float x = 0.f; x < 10.f; x += 0.2){
+        std::cout << "f(" << x << ") = " << f.eval(x) <<std::endl;
+    }
     return -42;
 }
