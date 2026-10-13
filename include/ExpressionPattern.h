@@ -3,12 +3,13 @@
 
 //Basically composite pattern
 #include <utility>
+#include <memory>
 
 template<typename T>
 struct Expression{
-    virtual ~Expression(){}
+    virtual ~Expression() = default;
     virtual T eval(const T& x) const = 0;
-    virtual Expression<T>* clone() const = 0;
+    virtual std::unique_ptr<Expression<T>> clone() const = 0;
 };
 
 template<typename T>
@@ -24,8 +25,8 @@ struct Constant : public Expression<T>{
     virtual T eval(const T& x) const override {
         return value;
     }
-    virtual Expression<T>* clone() const override {
-        return new Constant(*this);
+    virtual std::unique_ptr<Expression<T>> clone() const override {
+        return std::make_unique<Constant>(*this);
     }
 };
 
@@ -38,61 +39,48 @@ struct Variable : public Expression<T>{
     Variable(const Variable&) = default;
     Variable(Variable&&) noexcept = default;
 
-    virtual Expression<T>* clone() const override {
-        return new Variable(*this);
+    virtual std::unique_ptr<Expression<T>> clone() const override {
+        return std::make_unique<Variable>(*this);
     }
 };
 
 struct Add{
-    static auto eval(const auto& lhs, const auto& rhs){
-        return lhs + rhs;
-    }
+    static auto eval(const auto& lhs, const auto& rhs){return lhs + rhs;}
 };
 struct Sub{
-    static auto eval(const auto& lhs, const auto& rhs){
-        return lhs - rhs;
-    }
+    static auto eval(const auto& lhs, const auto& rhs){return lhs - rhs;}
 };
 struct Mul{
-    static auto eval(const auto& lhs, const auto& rhs){
-        return lhs * rhs;
-    }
+    static auto eval(const auto& lhs, const auto& rhs){return lhs * rhs;}
 };
 struct Div{
-    static auto eval(const auto& lhs, const auto& rhs){
-        return lhs / rhs;
-    }
+    static auto eval(const auto& lhs, const auto& rhs){return lhs / rhs;}
 };
 
 template<typename T, typename Op>
 struct Binary : public Expression<T>{
-    Expression<T>* lhs{};
-    Expression<T>* rhs{};
+    std::unique_ptr<Expression<T>> lhs;
+    std::unique_ptr<Expression<T>> rhs;
 
-    Binary(Expression<T>* l, Expression<T>* r)
-    : lhs{l}, rhs{r}
+    Binary(std::unique_ptr<Expression<T>> l, std::unique_ptr<Expression<T>> r)
+    : lhs{std::move(l)}, rhs{std::move(r)}
     {}
     Binary(const Binary& other)
     {
-        lhs = other.lhs.clone();
-        rhs = other.rhs.clone();
+        lhs = other.lhs ? other.lhs->clone() : nullptr;
+        rhs = other.rhs ? other.rhs->clone() : nullptr;
     }
-    Binary(Binary&& other) noexcept
-    {
-        std::swap(lhs, other.lhs);
-        std::swap(rhs, other.rhs);
-    }
-    ~Binary(){
-        delete lhs;
-        delete rhs;
-    }
+    Binary(Binary&& other) noexcept = default;
+    ~Binary(){}
+    Binary& operator=(const Binary&) = delete;
+    Binary& operator=(Binary&&) noexcept = default;
 
     virtual T eval(const T& x) const override {
         return Op::eval(lhs->eval(x), rhs->eval(x));
     }
 
-    virtual Expression<T>* clone() const override {
-        return new Binary(lhs->clone(), rhs->clone());
+    virtual std::unique_ptr<Expression<T>> clone() const override {
+        return std::make_unique<Binary>(lhs->clone(), rhs->clone());
     }
 };
 
