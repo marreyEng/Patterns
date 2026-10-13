@@ -26,8 +26,12 @@ PUBLIC
     FILES
         include/TestTitle.h
 )
+
 add_library(CommonInterface INTERFACE)
-target_link_libraries(CommonInterface INTERFACE TestTitle)
+target_link_libraries(CommonInterface
+INTERFACE
+    TestTitle
+)
 
 add_library(TypeErasurePattern SHARED)
 target_sources(TypeErasurePattern
@@ -137,22 +141,21 @@ PUBLIC
         include/ExpressionPattern.h
 )
 
+target_link_libraries(AbstractFactoryPattern PRIVATE CommonInterface)
+target_link_libraries(FactoryMethodPattern PRIVATE CommonInterface)
+target_link_libraries(AdaptorPattern PRIVATE CommonInterface)
+target_link_libraries(CommandPattern PRIVATE CommonInterface)
+target_link_libraries(StrategyPattern PRIVATE CommonInterface)
+target_link_libraries(PrototypePattern PRIVATE CommonInterface)
+target_link_libraries(TypeErasurePattern PRIVATE CommonInterface)
+target_link_libraries(CompositorPattern PRIVATE CommonInterface)
+target_link_libraries(ExpressionPattern PRIVATE CommonInterface)
+
 add_executable(exec)
 target_sources(exec
 PRIVATE
     src/main.cpp
 )
-
-target_link_libraries(AbstractFactoryPattern PRIVATE TestTitle)
-target_link_libraries(FactoryMethodPattern PRIVATE TestTitle)
-target_link_libraries(AdaptorPattern PRIVATE TestTitle)
-target_link_libraries(CommandPattern PRIVATE TestTitle)
-target_link_libraries(StrategyPattern PRIVATE TestTitle)
-target_link_libraries(PrototypePattern PRIVATE TestTitle)
-target_link_libraries(TypeErasurePattern PRIVATE TestTitle)
-target_link_libraries(CompositorPattern PRIVATE TestTitle)
-target_link_libraries(ExpressionPattern PRIVATE TestTitle)
-
 target_link_libraries(exec
 PRIVATE
     AbstractFactoryPattern

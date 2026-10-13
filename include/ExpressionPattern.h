@@ -2,72 +2,117 @@
 #define EXPRESSION_PATTERN_H
 
 //Basically composite pattern
+#include <utility>
 
+template<typename T>
 struct Expression{
-    virtual ~Expression(){};
-    virtual float eval(float x) = 0;
+    virtual ~Expression(){}
+    virtual T eval(const T& x) const = 0;
+    virtual Expression<T>* clone() const = 0;
 };
 
-struct Constant : public Expression{
-    const float d;
-    Constant(float dd)
-    : d{dd}
+template<typename T>
+struct Constant : public Expression<T>{
+    const T value;
+
+    Constant(const T& value_)
+    : value{value_}
     {}
-    virtual float eval(float x) override{
-        return d;
+    Constant(const Constant&) = default;
+    Constant(Constant&&) noexcept = default;
+
+    virtual T eval(const T& x) const override {
+        return value;
+    }
+    virtual Expression<T>* clone() const override {
+        return new Constant(*this);
     }
 };
 
-struct Variable : public Expression{
-    virtual float eval(float x) override {
+template<typename T>
+struct Variable : public Expression<T>{
+    virtual T eval(const T& x) const override {
         return x;
     }
+    Variable() = default;
+    Variable(const Variable&) = default;
+    Variable(Variable&&) noexcept = default;
+
+    virtual Expression<T>* clone() const override {
+        return new Variable(*this);
+    }
 };
 
-struct BinarySum : public Expression{
-    Expression* lhs{};
-    Expression* rhs{};
+struct Add{
+    static auto eval(const auto& lhs, const auto& rhs){
+        return lhs + rhs;
+    }
+};
+struct Sub{
+    static auto eval(const auto& lhs, const auto& rhs){
+        return lhs - rhs;
+    }
+};
+struct Mul{
+    static auto eval(const auto& lhs, const auto& rhs){
+        return lhs * rhs;
+    }
+};
+struct Div{
+    static auto eval(const auto& lhs, const auto& rhs){
+        return lhs / rhs;
+    }
+};
 
-    BinarySum(Expression* l, Expression* r)
-    : lhs{l}
-    , rhs{r}
+template<typename T, typename Op>
+struct Binary : public Expression<T>{
+    Expression<T>* lhs{};
+    Expression<T>* rhs{};
+
+    Binary(Expression<T>* l, Expression<T>* r)
+    : lhs{l}, rhs{r}
     {}
-
-    ~BinarySum(){
+    Binary(const Binary& other)
+    {
+        lhs = other.clone();
+        rhs = other.clone();
+    }
+    Binary(Binary&& other) noexcept
+    {
+        std::swap(lhs, other.lhs);
+        std::swap(rhs, other.rhs);
+    }
+    ~Binary(){
         delete lhs;
         delete rhs;
     }
 
-    virtual float eval(float x) override{
-        return lhs->eval(x) + rhs->eval(x);
+    virtual T eval(const T& x) const override {
+        return Op::eval(lhs->eval(x), rhs->eval(x));
+    }
+
+    virtual Expression<T>* clone() const override {
+        return new Binary(lhs->clone(), rhs->clone());
     }
 };
 
-struct BinaryMul : public Expression{
-    Expression* lhs{};
-    Expression* rhs{};
-
-    BinaryMul(Expression* l, Expression* r)
-    : lhs{l}
-    , rhs{r}
-    {}
-
-    ~BinaryMul(){
-        delete lhs;
-        delete rhs;
-    }
-
-    virtual float eval(float x) override{
-        return lhs->eval(x) * rhs->eval(x);
-    }
-};
-
-Expression* Add(Expression* lhs, Expression* rhs){
-    return new BinarySum(lhs, rhs);
+template<typename T>
+auto operator+(const Expression<T>& lhs, const Expression<T>& rhs){
+    return Binary<T,Add>(lhs.clone(), rhs.clone());
 }
-Expression* Mul(Expression* lhs, Expression* rhs){
-    return new BinaryMul(lhs, rhs);
+template<typename T>
+auto operator-(const Expression<T>& lhs, const Expression<T>& rhs){
+    return Binary<T,Sub>(lhs.clone(), rhs.clone());
 }
+template<typename T>
+auto operator*(const Expression<T>& lhs, const Expression<T>& rhs){
+    return Binary<T,Mul>(lhs.clone(), rhs.clone());
+}
+template<typename T>
+auto operator/(const Expression<T>& lhs, const Expression<T>& rhs){
+    return Binary<T,Div>(lhs.clone(), rhs.clone());
+}
+
 
 int ExpressionPattern();
 #endif
