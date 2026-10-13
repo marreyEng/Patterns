@@ -74,8 +74,8 @@ struct Binary : public Expression<T>{
     {}
     Binary(const Binary& other)
     {
-        lhs = other.clone();
-        rhs = other.clone();
+        lhs = other.lhs.clone();
+        rhs = other.rhs.clone();
     }
     Binary(Binary&& other) noexcept
     {
