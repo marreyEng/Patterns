@@ -5,26 +5,21 @@
 #include <iomanip>
 
 auto createExpression(){
-    const float A = 1;
-    const float B = 1;
-    const float C = 1;
-    const auto a = Constant<float>(A);
-    const auto b = Constant<float>(B);
-    const auto c = Constant<float>(C);
-    const auto x = Variable<float>();
+    float A = 1;
+    float B = 1;
+    float C = 1;
+    auto a = Expr<float>(A);
+    auto b = Expr<float>(B);
+    auto c = Expr<float>(C);
+    auto x = Expr<float>::CreateVariable();
 
-    auto f = a * x + b;
-
-    return f;
+    return a * x + b;
 }
 
 int ExpressionPattern(){
     Title t{__func__};
 
     auto f = createExpression();
-    for(float x = 0.f; x<10.0; x += 1.f){
-    std::cout << std::setprecision(23);
-        std::cout << "f(" << x << "): " << f.eval(x) <<std::endl;
-    }
+    std::cout << f.eval(1);
     return -42;
 }
