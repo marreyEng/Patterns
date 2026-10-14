@@ -7,6 +7,7 @@
 #include <TypeErasurePattern.h>
 #include <CompositorPattern.h>
 #include <ExpressionPattern.h>
+#include <BridgePattern.h>
 
 int main(){
     AdaptorPattern();
@@ -20,6 +21,7 @@ int main(){
     TypeErasurePattern();
     CompositorPattern();
     ExpressionPattern();
+    BridgePattern();
 
     return 0;
 }

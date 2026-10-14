@@ -45,6 +45,18 @@ PUBLIC
         include/TypeErasurePattern.h
 )
 
+add_library(BridgePattern SHARED)
+target_sources(BridgePattern
+PRIVATE
+    src/BridgePattern.cpp
+PUBLIC
+    FILE_SET headers
+    TYPE HEADERS
+    BASE_DIRS include
+    FILES
+        include/BridgePattern.h
+)
+
 add_library(CommandPattern SHARED)
 target_sources(CommandPattern
 PRIVATE
@@ -150,6 +162,7 @@ target_link_libraries(PrototypePattern PRIVATE CommonInterface)
 target_link_libraries(TypeErasurePattern PRIVATE CommonInterface)
 target_link_libraries(CompositorPattern PRIVATE CommonInterface)
 target_link_libraries(ExpressionPattern PRIVATE CommonInterface)
+target_link_libraries(BridgePattern PRIVATE CommonInterface)
 
 add_executable(exec)
 target_sources(exec
@@ -167,4 +180,5 @@ PRIVATE
     TypeErasurePattern
     CompositorPattern
     ExpressionPattern
+    BridgePattern
 )
